@@ -1,0 +1,24 @@
+{
+  "name": "next-hnpwa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "emotion": "^9.2.12",
+    "emotion-server": "^9.2.12",
+    "mobx": "^5.5.0",
+    "mobx-react": "^5.2.8",
+    "next": "^7.0.1",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  }
+}
