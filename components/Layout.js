@@ -50,13 +50,10 @@ const containerInner = css`
   width: 100%;
 `;
 
-export default ({ title, children }) => (
+export default ({ children }) => (
   <div className={layoutWrapper}>
     <div className={layoutInner}>
-      <Head>
-        <title key="title">{title}</title>
-      </Head>
-      <Header title={title} />
+      <Header />
       <Container className={containerCss}>
         <div className={containerInner}>{children}</div>
       </Container>
