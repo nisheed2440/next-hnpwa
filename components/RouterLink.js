@@ -1,38 +1,48 @@
 import { withRouter } from "next/router";
 import { cx } from "emotion";
-const ActiveLink = ({
-  children,
-  router,
-  href,
-  title,
-  activeClass,
-  inactiveClass,
-  className,
-  ...rest
-}) => {
-  const linkClass = router.pathname === href ? activeClass : inactiveClass;
+class RouterLink extends React.Component {
+  componentDidMount() {
+    const { router, href } = this.props;
+    router.prefetch(href);
+  }
 
-  const handleClick = e => {
+  handleClick = e => {
+    const { router, href } = this.props;
     e.preventDefault();
     router.push(href);
   };
 
-  return (
-    <a
-      href={href}
-      title={title}
-      onClick={handleClick}
-      className={cx(className, linkClass)}
-      {...rest}
-    >
-      {children}
-    </a>
-  );
-};
+  render() {
+    const {
+      children,
+      router,
+      href,
+      title,
+      activeClass,
+      inactiveClass,
+      className,
+      ...rest
+    } = this.props;
 
-ActiveLink.defaultProps = {
+    const linkClass = router.pathname === href ? activeClass : inactiveClass;
+
+    return (
+      <a
+        href={href}
+        title={title}
+        onClick={this.handleClick}
+        className={cx(className, linkClass)}
+        {...rest}
+      >
+        {children}
+      </a>
+    );
+  }
+}
+
+RouterLink.defaultProps = {
   activeClass: "",
   inactiveClass: ""
 };
 
-export default withRouter(ActiveLink);
+export default withRouter(RouterLink);
