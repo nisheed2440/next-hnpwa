@@ -1,9 +1,9 @@
 import { css, injectGlobal } from "emotion";
 import "./GlobalStyles";
-import Head from "next/head";
 import Header from "./Header";
 import Container from "./Container";
 import Footer from "./Footer";
+import { Loader } from "./Loader";
 
 injectGlobal`
   html, body{
@@ -58,6 +58,7 @@ export default ({ children }) => (
       <Header />
       <Container className={containerCss}>
         <div className={containerInner}>{children}</div>
+        <Loader></Loader>
       </Container>
       <Container className={footerContainerCss}>
         <Footer />

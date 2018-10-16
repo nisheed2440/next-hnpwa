@@ -18,16 +18,19 @@ const renderBasedOnRoute = (req, res, type) => {
   return handle(req, res);
 };
 
-const getItemsData = items => {
-  let promiseArray = [];
-  items.forEach(item => {
-    promiseArray.push(
-      fetch(` https://hacker-news.firebaseio.com/v0/item/${item}.json`)
-        .then(res => res.json())
-        .then(data => data)
-    );
-  });
-  return Promise.all(promiseArray);
+const getDataFromHackerWebApp = (pageType, pageId) => {
+  return Promise.all([
+    fetch(`https://node-hnapi.herokuapp.com/${pageType}?page=${pageId}`)
+      .then(res => res.json())
+      .catch(err => {
+        return { error: err };
+      }),
+    fetch(`https://node-hnapi.herokuapp.com/${pageType}?page=${pageId + 1}`)
+      .then(res => res.json())
+      .catch(err => {
+        return { error: err };
+      })
+  ]);
 };
 
 app.prepare().then(() => {
@@ -40,62 +43,46 @@ app.prepare().then(() => {
       pageId: req.params.pageId,
       pageType: req.params.pageType
     };
-    fetch(
-      `https://hacker-news.firebaseio.com/v0/${
-        queryParams.pageType
-      }stories.json`
-    )
-      .then(res => res.json())
-      .then(data => {
-        if (data.error) {
+
+    getDataFromHackerWebApp(queryParams.pageType, queryParams.pageId).then(
+      data => {
+        const currPageData = data[0];
+        const nextPageData = data[1];
+
+        // If any API results in error
+        if (currPageData.error || nextPageData.error) {
           res.json({
-            error: data.error
+            error: currPageData.error || nextPageData.error
           });
           return;
         }
 
-        const totalPages = Math.ceil(data.length / perPage);
-        let currPage = parseInt(queryParams.pageId, 10);
-        let isRedirect = false;
-
-        if (currPage > totalPages) {
-          currPage = totalPages;
-          isRedirect = true;
-        }
-        if (currPage <= 0) {
-          currPage = 1;
-          isRedirect = true;
-        }
-
-        if (isRedirect) {
+        // If any API has length 0
+        if (!currPageData.length) {
           res.json({
-            isRedirect,
-            toPage: currPage
+            error: {
+              message: "No data available"
+            }
           });
           return;
         }
 
+        const currPage = parseInt(queryParams.pageId, 10);
+        const nextPage = nextPageData.length > 0 ? currPage + 1 : null;
         const prevPage = currPage - 1 <= 0 ? null : currPage - 1;
-        const nextPage = currPage + 1 > totalPages ? null : currPage + 1;
+
         const pagination = {
-          totalPages,
           currPage,
           prevPage,
           nextPage
         };
 
-        const pageData = data.slice(
-          !prevPage ? 0 : prevPage * perPage,
-          currPage * perPage
-        );
-
-        getItemsData(pageData).then(result => {
-          res.json({
-            pagination,
-            data: result
-          });
+        res.json({
+          pagination,
+          data: currPageData
         });
-      });
+      }
+    );
   });
 
   server.get("/top", (req, res) => {

@@ -1,25 +1,25 @@
 import { Component, Fragment } from "react";
 import { withRouter } from "next/router";
-import Link from "next/link";
 import Pagination from "../components/Pagination";
-
+import { inject, observer } from "mobx-react";
+import Error from "./_error";
+@inject("store")
+@observer
 class TopPage extends Component {
-  static async getInitialProps({ query, req }) {
-    const baseUrl = req ? `${req.protocol}://${req.get("Host")}` : "";
-    const page = query.pageId || 1;
-    const res = await fetch(`${baseUrl}/api/top/${page}`);
-    const json = res.json();
-    return json;
+  static async getInitialProps({ query, req, mobxStore }) {
+    await mobxStore.getPageData("news", query, req);
+    return {
+      store: mobxStore
+    };
   }
   render() {
-    const { pagination, data } = this.props;
-    return (
+    const { store } = this.props;
+    return store.hasError ? (
+      <Error />
+    ) : (
       <Fragment>
-        <Pagination pagination={pagination} type={"top"} />
-        <div>
-          {/* {JSON.stringify(pagination)} */}
-          {JSON.stringify(data)}
-        </div>
+        <Pagination pagination={store.paginationData} type={"top"} />
+        <div>{JSON.stringify(store.pageData)}</div>
       </Fragment>
     );
   }
