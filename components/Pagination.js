@@ -6,7 +6,7 @@ const paginationCss = css`
   display: flex;
   width: 100%;
   background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 `;
 const linkWrapper = css`
   display: flex;
@@ -42,9 +42,7 @@ export default ({ pagination = {}, type = "" }) => (
         </Link>
       )}
     </div>
-    <div className={pageOffset}>
-      {pagination.currPage}/{pagination.totalPages}
-    </div>
+    <div className={pageOffset}>Page {pagination.currPage}</div>
     <div className={linkWrapper}>
       {pagination.nextPage && (
         <Link
