@@ -11,7 +11,7 @@ injectGlobal`
     height: 100%;
     width: 100%;
     overflow: hidden;
-    background-color: #f3f3f4;
+    background-color: #f2f3f5;
   }
 `;
 
@@ -42,12 +42,14 @@ const footerContainerCss = css`
 `;
 
 const containerInner = css`
-  overflow-y: auto;
+  overflow-y: hidden;
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default ({ children }) => (

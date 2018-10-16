@@ -345,6 +345,7 @@ template {
 
 *{
   box-sizing: border-box;
+  font-smoothing: antialiased;
 }
 
 ::-webkit-scrollbar-track {

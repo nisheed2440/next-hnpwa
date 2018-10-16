@@ -1,48 +1,61 @@
 import { css } from "emotion";
-import { Fragment } from "react";
-const buttonCss = css`
-  background-color: #1bb394;
-  border-color: transparent;
-  color: #fff;
-  border-radius: 0;
-  height: 50px;
-  width: 50px;
-  z-index: 10;
-  cursor: pointer;
+import Link from "next/link";
+
+const paginationCss = css`
+  flex-shrink: 0;
+  display: flex;
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+`;
+const linkWrapper = css`
+  display: flex;
+  flex: 1;
+  &:first-child {
+    justify-content: flex-start;
+  }
+  &:last-child {
+    justify-content: flex-end;
+  }
+
+  a {
+    padding: 15px 30px;
+    text-decoration: none;
+  }
+`;
+const pageOffset = css`
+  padding: 15px;
+  display: flex;
   justify-content: center;
-  padding: calc(0.375em - 1px) 0.75em;
-  text-align: center;
-  white-space: nowrap;
-  align-items: center;
-  border: 1px solid transparent;
-  display: inline-flex;
-  font-size: 1rem;
-  box-shadow: none;
-  border-radius: 0;
 `;
-const buttonPrev = css`
-  ${buttonCss};
-  border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
-  position: fixed;
-  bottom: 30px;
-  left: 0;
-`;
-const buttonNext = css`
-  ${buttonCss};
-  border-top-left-radius: 50%;
-  border-bottom-left-radius: 50%;
-  position: fixed;
-  bottom: 30px;
-  right: 0;
-`;
-export default ({ prevHandler = () => {}, nextHandler = () => {} }) => (
-  <Fragment>
-    <button className={buttonPrev} type="button" onClick={prevHandler}>
-      Prev
-    </button>
-    <button className={buttonNext} type="button" onClick={nextHandler}>
-      Next
-    </button>
-  </Fragment>
+export default ({ pagination = {}, type = "" }) => (
+  <nav className={paginationCss}>
+    <div className={linkWrapper}>
+      {pagination.prevPage && (
+        <Link
+          href={{
+            pathname: `/${type}`,
+            query: { pageId: pagination.prevPage }
+          }}
+        >
+          <a>&lt; prev</a>
+        </Link>
+      )}
+    </div>
+    <div className={pageOffset}>
+      {pagination.currPage}/{pagination.totalPages}
+    </div>
+    <div className={linkWrapper}>
+      {pagination.nextPage && (
+        <Link
+          href={{
+            pathname: `/${type}`,
+            query: { pageId: pagination.nextPage }
+          }}
+        >
+          <a>more &gt;</a>
+        </Link>
+      )}
+    </div>
+  </nav>
 );
