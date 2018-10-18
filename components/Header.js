@@ -8,7 +8,7 @@ const headerWrapper = css`
   background-color: #00d1b2;
   color: #ffffff;
   box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12);
-  z-index: 1;
+  z-index: 3;
 `;
 
 const headerFlex = css`

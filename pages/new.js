@@ -1,6 +1,7 @@
 import { Component, Fragment } from "react";
 import { withRouter } from "next/router";
 import Pagination from "../components/Pagination";
+import DataWrapper from "../components/DataWrapper";
 import { inject, observer } from "mobx-react";
 import Error from "./_error";
 @inject("store")
@@ -19,7 +20,7 @@ class NewPage extends Component {
     ) : (
       <Fragment>
         <Pagination pagination={store.paginationData} type={"new"} />
-        <div>{JSON.stringify(store.pageData)}</div>
+        <DataWrapper data={store.pageData} type={"new"} />
       </Fragment>
     );
   }

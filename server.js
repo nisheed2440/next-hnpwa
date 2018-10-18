@@ -9,12 +9,15 @@ const handle = app.getRequestHandler();
 
 const renderBasedOnRoute = (req, res, type) => {
   const queryParams = {
-    pageId: req.query.pageId
+    pageId: req.query.pageId,
+    itemId: req.query.itemId
   };
-  if (queryParams.pageId) {
+
+  if (Object.values(queryParams).length) {
     app.render(req, res, `/${type}`, queryParams);
     return;
   }
+
   return handle(req, res);
 };
 
@@ -33,12 +36,20 @@ const getDataFromHackerWebApp = (pageType, pageId) => {
   ]);
 };
 
+const getItemFromHackerWebApp = itemId => {
+  return fetch(`https://api.hackerwebapp.com/item/${itemId}`)
+    .then(res => res.json())
+    .catch(err => {
+      return { error: err };
+    });
+};
+
 app.prepare().then(() => {
   const perPage = 30;
   const server = express();
   server.use(compression());
 
-  server.get("/api/:pageType/:pageId", (req, res) => {
+  server.get("/api/page/:pageType/:pageId", (req, res) => {
     const queryParams = {
       pageId: parseInt(req.params.pageId, 10),
       pageType: req.params.pageType
@@ -68,6 +79,7 @@ app.prepare().then(() => {
         }
 
         // Check to see if next page data matches current page data
+        // Quirk with news
         if (currPageData.length && nextPageData.length) {
           if (currPageData[0].id === nextPageData[0].id) {
             nextPageData = [];
@@ -92,6 +104,31 @@ app.prepare().then(() => {
     );
   });
 
+  server.get("/api/item/:itemId", (req, res) => {
+    const itemId = req.params.itemId;
+    if (itemId) {
+      getItemFromHackerWebApp(itemId).then(data => {
+        if (data.error) {
+          res.json({
+            error: {
+              message: "No data available"
+            }
+          });
+          return;
+        }
+        res.json({ data });
+        return;
+      });
+    } else {
+      res.json({
+        error: {
+          message: "No data available"
+        }
+      });
+      return;
+    }
+  });
+
   server.get("/top", (req, res) => {
     return renderBasedOnRoute(req, res, "top");
   });
@@ -106,6 +143,9 @@ app.prepare().then(() => {
   });
   server.get("/jobs", (req, res) => {
     return renderBasedOnRoute(req, res, "jobs");
+  });
+  server.get("/comments", (req, res) => {
+    return renderBasedOnRoute(req, res, "comments");
   });
 
   server.get("/", (req, res) => {
