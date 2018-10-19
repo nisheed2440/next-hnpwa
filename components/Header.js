@@ -1,13 +1,15 @@
 import { css } from "emotion";
+import { Fragment } from "react";
 import Container from "./Container";
 import HNLogo from "./HNLogo";
 import MainNav from "./MainNav";
 
 const headerWrapper = css`
   padding: 0 16px;
-  background-color: #00d1b2;
+  background-color: #1d1d1d;
   color: #ffffff;
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.14),
+    0 1px 10px rgba(0, 0, 0, 0.12);
   z-index: 3;
 `;
 
@@ -82,34 +84,67 @@ const headerTitle = css`
 const headerSubtitle = css`
   font-size: 12px;
 `;
+const skipToContent = css`
+  left: -999px;
+  position: absolute;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: -999;
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  &:focus,
+  &:active {
+    color: #fff;
+    background-color: #1d1d1d;
+    left: auto;
+    top: auto;
+    width: 200px;
+    height: 44px;
+    overflow: hidden;
+    margin: 0px 50%;
+    transform: translateX(-50%);
+    border: 1px solid #ffffff;
+    text-align: center;
+    z-index: 999;
+    line-height: 44px;
+  }
+`;
 
 export default () => (
-  <header className={headerWrapper}>
-    <Container className={headerContainer}>
-      <div className={headerLogo}>
-        <div className={headerLogoInner}>
-          <HNLogo width="30" height="30" />
-          <span className={headerMbTitle}>HN</span>
-          <span className={headerTitle}>Hacker News</span>
+  <Fragment>
+    <a href="#main-content" className={skipToContent}>
+      Skip to content
+    </a>
+    <header className={headerWrapper}>
+      <Container className={headerContainer}>
+        <div className={headerLogo}>
+          <div className={headerLogoInner}>
+            <HNLogo width="30" height="30" />
+            <span className={headerMbTitle}>HN</span>
+            <span className={headerTitle}>Hacker News</span>
+          </div>
+          <span className={headerSubtitle}>&nbsp;Powered by Next.js</span>
         </div>
-        <span className={headerSubtitle}>&nbsp;Powered by Next.js</span>
-      </div>
-      <div className={headerLinks}>
-        <div className={headerLeft}>
-          <MainNav
-            links={[
-              { link: "/top", label: "Top" },
-              { link: "/new", label: "New" },
-              { link: "/show", label: "Show" },
-              { link: "/ask", label: "Ask" },
-              { link: "/jobs", label: "Jobs" }
-            ]}
-          />
+        <div className={headerLinks}>
+          <div className={headerLeft}>
+            <MainNav
+              links={[
+                { link: "/top", label: "Top" },
+                { link: "/new", label: "New" },
+                { link: "/show", label: "Show" },
+                { link: "/ask", label: "Ask" },
+                { link: "/jobs", label: "Jobs" }
+              ]}
+            />
+          </div>
+          <div className={headerRight}>
+            <MainNav links={[{ link: "/about", label: "About" }]} />
+          </div>
         </div>
-        <div className={headerRight}>
-          <MainNav links={[{ link: "/about", label: "About" }]} />
-        </div>
-      </div>
-    </Container>
-  </header>
+      </Container>
+    </header>
+  </Fragment>
 );

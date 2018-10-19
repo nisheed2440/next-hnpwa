@@ -11,7 +11,7 @@ injectGlobal`
     height: 100%;
     width: 100%;
     overflow: hidden;
-    background-color: #f2f3f5;
+    background-color: #edebed;
   }
 `;
 
@@ -57,8 +57,10 @@ export default ({ children }) => (
     <div className={layoutInner}>
       <Header />
       <Container className={containerCss}>
-        <div className={containerInner}>{children}</div>
-        <Loader></Loader>
+        <div id="main-content" className={containerInner}>
+          {children}
+        </div>
+        <Loader />
       </Container>
       <Container className={footerContainerCss}>
         <Footer />

@@ -6,14 +6,16 @@ const errorPageWrapper = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: auto;
 `;
 
 const errorImage = css`
+  flex-shrink: 0;
   width: 200px;
   height: 200px;
   background: url("/static/bug.png") no-repeat center center;
   background-size: contain;
-  @media screen and (min-width: 1088px){
+  @media screen and (min-width: 1088px) {
     width: 256px;
     height: 256px;
   }

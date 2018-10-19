@@ -45,9 +45,13 @@ const getItemFromHackerWebApp = itemId => {
 };
 
 app.prepare().then(() => {
-  const perPage = 30;
   const server = express();
   server.use(compression());
+  server.use(
+    express.static(__dirname + "/static", {
+      maxage: dev ? "0" : "365d"
+    })
+  );
 
   server.get("/api/page/:pageType/:pageId", (req, res) => {
     const queryParams = {

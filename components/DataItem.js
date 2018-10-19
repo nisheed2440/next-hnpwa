@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { css } from "emotion";
+import { css, cx } from "emotion";
 import Link from "next/link";
 
 const dataItemWrapper = css`
@@ -25,16 +25,16 @@ const pointsWrapper = css`
 const pointsCountText = css`
   font-size: 18px;
   margin-bottom: 5px;
+  min-width: 60px;
+  text-align: center;
 `;
-const pointsSubText = css`
-  text-transform: uppercase;
-  font-size: 12px;
-`;
+
 const contentWrapper = css`
   padding: 10px;
   flex: 1;
 `;
 const itemTitle = css`
+  font-weight: 500;
   @media screen and (min-width: 768px) {
     font-size: 18px;
   }
@@ -45,15 +45,15 @@ const itemTitle = css`
 `;
 
 const itemSubText = css`
-  font-size: 14px;
+  font-size: 16px;
   margin-top: 5px;
 `;
 
 const itemUser = css`
   display: inline-block;
-  color: #999999;
+  color: #1d1d1d;
   a {
-    color: #999999;
+    color: #1d1d1d;
     text-decoration: none;
     &:hover {
       color: #1d1d1d;
@@ -62,9 +62,23 @@ const itemUser = css`
   }
 `;
 
+const timeAgo = css`
+  display: none;
+  @media screen and (min-width: 768px) {
+    ${itemUser};
+  }
+`;
+
+const hideSpacerMb = css`
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: inline-block;
+  }
+`;
+
 const itemSpacer = css`
   display: inline-block;
-  color: #999999;
+  color: #1d1d1d;
   margin: 0 10px;
 `;
 
@@ -84,7 +98,6 @@ class DataItem extends Component {
         {data.type !== "job" && (
           <div className={pointsWrapper}>
             <span className={pointsCountText}>{data.points}</span>
-            <span className={pointsSubText}>points</span>
           </div>
         )}
         <div className={contentWrapper}>
@@ -93,7 +106,7 @@ class DataItem extends Component {
               href={this.getUrl()}
               title={data.title}
               target={"_blank"}
-              rel={"nofollow"}
+              rel={"noopener"}
             >
               {data.title}
             </a>
@@ -108,10 +121,10 @@ class DataItem extends Component {
               </div>
             )}
             {data.type !== "job" && <div className={itemSpacer}>|</div>}
-            <div className={itemUser}>
+            <div className={timeAgo}>
               <span>{data.time_ago}</span>
             </div>
-            <div className={itemSpacer}>|</div>
+            <div className={cx(itemSpacer, hideSpacerMb)}>|</div>
             <div className={itemUser}>
               <Link href={`/comments?itemId=${data.id}`}>
                 <a title={data.comments_count}>
