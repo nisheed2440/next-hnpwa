@@ -1,6 +1,11 @@
 {
  "name": "HN PWA",
  "short_name": "HN PWA",
+ "background_color": "#edebed",
+ "theme_color": "#1d1d1d",
+ "start_url": "/top",
+ "orientation": "portrait",
+ "display": "fullscreen",
  "icons": [
   {
    "src": "\/static\/android-icon-36x36.png",
