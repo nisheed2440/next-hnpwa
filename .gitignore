@@ -74,3 +74,6 @@ typings/
 
 # Next ignores
 .next
+build
+dist
+.firebase
